@@ -8,7 +8,7 @@ function App() {
   const [category, setCategory] = useState('');
   const [quantity, setQuantity] = useState(1);
 
-  const API_URL = 'https://mern-item-manager-nu4w.onrender.com';
+  const API_URL = 'https://mern-item-manager-nu4w.onrender.com/items';
 
   const fetchItems = async () => {
     try {
