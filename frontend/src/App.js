@@ -8,7 +8,7 @@ function App() {
   const [category, setCategory] = useState('');
   const [quantity, setQuantity] = useState(1);
 
-  const API_URL = 'http://localhost:5000/items';
+  const API_URL = 'https://mern-item-manager-nu4w.onrender.com';
 
   const fetchItems = async () => {
     try {
@@ -37,6 +37,34 @@ function App() {
     }
   };
 
+  // Add these functions inside your App() component, near the addItem function
+
+// 1. Delete an item
+const deleteItem = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5000/items/${id}`);
+    fetchItems(); // Refresh the list
+  } catch (err) {
+    console.error("Delete failed", err);
+  }
+};
+
+// 2. Update an item (Example: Restock +5)
+const restockItem = async (id, currentQuantity) => {
+  try {
+    await axios.put(`http://localhost:5000/items/${id}`, { 
+      quantity: Number(currentQuantity) + 5 
+    });
+    fetchItems(); // Refresh the list
+  } catch (err) {
+    console.error("Update failed", err);
+  }
+};
+
+// --- In your return (Table section) ---
+// Add an "Actions" column to your table
+
+
   return (
     <div style={{ padding: '40px', fontFamily: 'Arial' }}>
       <h1>📦 Item Manager Pro</h1>
@@ -63,11 +91,19 @@ function App() {
               <td>{item.name}</td>
               <td>{item.category}</td>
               <td>{item.quantity}</td>
+              <td>
+                <button onClick={() => restockItem(item._id, item.quantity)} style={{ marginRight: '10px', color: 'blue' }}>
+                  Restock (+5)
+                  </button>
+                  <button onClick={() => deleteItem(item._id)} style={{ color: 'red' }}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+
+    
   );
 }
 

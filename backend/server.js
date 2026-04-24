@@ -37,5 +37,29 @@ app.post('/items', async (req, res) => {
     res.json(savedItem);
 });
 
+// 3. UPDATE an item (PUT)
+app.put('/items/:id', async (req, res) => {
+    try {
+        const updatedItem = await Item.findByIdAndUpdate(
+            req.params.id, 
+            req.body, 
+            { new: true } // This returns the modified document rather than the original
+        );
+        res.json(updatedItem);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// 4. DELETE an item (DELETE)
+app.delete('/items/:id', async (req, res) => {
+    try {
+        await Item.findByIdAndDelete(req.params.id);
+        res.json({ message: "Item deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
